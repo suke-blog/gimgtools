@@ -5,6 +5,43 @@ double get_degrees(uint32_t value)
 	return (double)value * 0.00000008381903171539306640625;
 }
 
+void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
+	uint8_t basehight_size, uint8_t diffhight_size,
+	uint8_t extra_size, uint8_t tile_count)
+{
+	uint8_t *ptr = ptrBlock1;
+
+	for(int j=0; j<tile_count; j++){
+		uint32_t offset_block2 = 0;
+		uint16_t basehight = 0;
+		uint16_t diffhight_max = 0;
+		uint8_t encoding_type = 0;
+
+		char *str = dump_unknown_bytes(ptr, offset_size+1);
+		printf("offset:%s\n", str);
+		for(int i=0; i<offset_size+1; i++){
+			offset_block2 |= *(ptr++) << (8*i);
+		}
+
+		for(int i=0; i<basehight_size+1; i++){
+			basehight |= *(ptr++) << (8*i);
+		}
+
+		for(int i=0; i<diffhight_size+1; i++){
+			diffhight_max |= *(ptr++) << (8*i);
+		}
+
+		if(extra_size == 1)
+			encoding_type = *(ptr++);
+
+		printf("---BLOCK1 (%d / %d)---\n", j+1, tile_count);
+		printf("> Offset Block2:  0x%x\n", offset_block2);
+		printf("> Base Hight:     %u\n", basehight);
+		printf("> Diff Hight Max: %u\n", diffhight_max);
+		printf("> Encoding type:  %u\n", encoding_type);
+	}
+}
+
 void dump_dem (struct subfile_struct *sf)
 {
 	struct garmin_dem *header = (struct garmin_dem *)sf->header;
@@ -62,9 +99,17 @@ void dump_dem (struct subfile_struct *sf)
 			block3[i].pixel_distance_y);
 		printf("Hight min:              %u\n", block3[i].hight_min);
 		printf("Hight max:              %u\n", block3[i].hight_max);
+
+		dump_dem_block1((uint8_t *)(sf->base + block3[i].points_to_block1),
+			block3[i].block1_offset_size,
+			block3[i].block1_basehight_size,
+			block3[i].block1_diffhight_size,
+			block3[i].block1_extra,
+			block3[i].tile_size);
+
 		printf("\n-----------\n");
 	}
 
-
 	return;
 }
+
