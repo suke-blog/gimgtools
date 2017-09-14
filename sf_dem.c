@@ -30,37 +30,40 @@ void dump_dem (struct subfile_struct *sf)
 				dump_unknown_bytes((uint8_t *)header + sizeof(struct garmin_gmp), header->comm.hlen - sizeof(struct garmin_gmp)));
 
 	//block3
-	printf("=== DEM BLOCK3 ===\n");
-	printf("Record index:           %u\n", block3->record_index);
-	printf("Number of pixel(X):     %u\n", block3->pixel_num_x);
-	printf("Number of pixel(Y):     %u\n", block3->pixel_num_y);
-	printf("Size of pixel(X):       %u\n", block3->pixel_size_x);
-	printf("size of pixel(Y):       %u\n", block3->pixel_size_y);
-	printf("unknown_12:             0x%x\n", block3->unknown_12);
-	printf("Max Tile index(X):      %u\n", block3->tile_index_max_x);
-	printf("Max Tile index(Y):      %u\n", block3->tile_index_max_y);
-	printf("Block1 offset size:     %u\n", block3->block1_offset_size);
-	printf("Block1 Base Hight size: %u\n", block3->block1_basehight_size);
-	printf("Block1 Hight Diff size: %u\n", block3->block1_diffhight_size);
-	printf("Block1 extra size:      %u\n", block3->block1_extra);
-	printf("reserved1C:             0x%x\n", block3->reserved1C);
-	printf("Tile size:              %u\n", block3->tile_size);
-	printf("Points to Block 1:      0x%x\n", block3->points_to_block1);
-	printf("Points to Block 2:      0x%x\n", block3->points_to_block2);
-	printf("Boundary west:          %f(0x%x)\n",
-		get_degrees(block3->boundary_west),
-		block3->boundary_west);
-	printf("Boundary north:         %f(0x%x)\n",
-		get_degrees(block3->boundary_north),
-		block3->boundary_north);
-	printf("Pixel distance(X):      %f(0x%x)\n",
-		get_degrees(block3->pixel_distance_x),
-		block3->pixel_distance_x);
-	printf("Pixel distance(Y):      %f(0x%x)\n",
-		get_degrees(block3->pixel_distance_y),
-		block3->pixel_distance_y);
-	printf("Hight min:              %u\n", block3->hight_min);
-	printf("Hight max:              %u\n", block3->hight_max);
+	for(int i=0; i<header->zoom_levels; i++){
+		printf("=== DEM BLOCK3 (%d / %d) ===\n", i+1, header->zoom_levels);
+		printf("Record index:           %u\n", block3[i].record_index);
+		printf("Number of pixel(X):     %u\n", block3[i].pixel_num_x);
+		printf("Number of pixel(Y):     %u\n", block3[i].pixel_num_y);
+		printf("Size of pixel(X):       %u\n", block3[i].pixel_size_x);
+		printf("size of pixel(Y):       %u\n", block3[i].pixel_size_y);
+		printf("unknown_12:             0x%x\n", block3[i].unknown_12);
+		printf("Max Tile index(X):      %u\n", block3[i].tile_index_max_x);
+		printf("Max Tile index(Y):      %u\n", block3[i].tile_index_max_y);
+		printf("Block1 offset size:     %u\n", block3[i].block1_offset_size);
+		printf("Block1 Base Hight size: %u\n", block3[i].block1_basehight_size);
+		printf("Block1 Hight Diff size: %u\n", block3[i].block1_diffhight_size);
+		printf("Block1 extra size:      %u\n", block3[i].block1_extra);
+		printf("reserved1C:             0x%x\n", block3[i].reserved1C);
+		printf("Tile size:              %u\n", block3[i].tile_size);
+		printf("Points to Block 1:      0x%x\n", block3[i].points_to_block1);
+		printf("Points to Block 2:      0x%x\n", block3[i].points_to_block2);
+		printf("Boundary west:          %f(0x%x)\n",
+			get_degrees(block3[i].boundary_west),
+			block3[i].boundary_west);
+		printf("Boundary north:         %f(0x%x)\n",
+			get_degrees(block3[i].boundary_north),
+			block3[i].boundary_north);
+		printf("Pixel distance(X):      %f(0x%x)\n",
+			get_degrees(block3[i].pixel_distance_x),
+			block3[i].pixel_distance_x);
+		printf("Pixel distance(Y):      %f(0x%x)\n",
+			get_degrees(block3[i].pixel_distance_y),
+			block3[i].pixel_distance_y);
+		printf("Hight min:              %u\n", block3[i].hight_min);
+		printf("Hight max:              %u\n", block3[i].hight_max);
+		printf("\n-----------\n");
+	}
 
 
 	return;
