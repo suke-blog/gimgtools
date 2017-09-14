@@ -1,5 +1,10 @@
 #include "gimglib.h"
 
+double get_degrees(uint32_t value)
+{
+	return (double)value * 0.00000008381903171539306640625;
+}
+
 void dump_dem (struct subfile_struct *sf)
 {
 	struct garmin_dem *header = (struct garmin_dem *)sf->header;
@@ -42,12 +47,20 @@ void dump_dem (struct subfile_struct *sf)
 	printf("Tile size:              %u\n", block3->tile_size);
 	printf("Points to Block 1:      0x%x\n", block3->points_to_block1);
 	printf("Points to Block 2:      0x%x\n", block3->points_to_block2);
-	printf("Boundary west:          %u\n", block3->boundary_west);
-	printf("Boundary north:         %u\n", block3->boundary_north);
-	printf("Pixel distance(X):      %u\n", block3->pixel_distance_x);
-	printf("Pixel distance(Y):      %u\n", block3->pixel_distance_y);
-	printf("Hight min:              0x%x\n", block3->hight_min);
-	printf("Hight max:              0x%x\n", block3->hight_max);
+	printf("Boundary west:          %f(0x%x)\n",
+		get_degrees(block3->boundary_west),
+		block3->boundary_west);
+	printf("Boundary north:         %f(0x%x)\n",
+		get_degrees(block3->boundary_north),
+		block3->boundary_north);
+	printf("Pixel distance(X):      %f(0x%x)\n",
+		get_degrees(block3->pixel_distance_x),
+		block3->pixel_distance_x);
+	printf("Pixel distance(Y):      %f(0x%x)\n",
+		get_degrees(block3->pixel_distance_y),
+		block3->pixel_distance_y);
+	printf("Hight min:              %u\n", block3->hight_min);
+	printf("Hight max:              %u\n", block3->hight_max);
 
 
 	return;
