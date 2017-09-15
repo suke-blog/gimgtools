@@ -386,6 +386,32 @@ struct garmin_dem
 	uint32_t reserved2;         // 0x025
 } PACK_STRUCT ;
 
+struct garmin_dem_block3
+{
+	uint16_t record_index;		//0x00
+	uint32_t pixel_num_x;		//0x02
+	uint32_t pixel_num_y;		//0x06
+	uint32_t pixel_size_x;		//0x0A
+	uint32_t pixel_size_y;		//0x0E
+	uint16_t unknown_12;		//0x12
+	uint32_t tile_index_max_x;	//0x14
+	uint32_t tile_index_max_y;	//0x18
+	uint16_t block1_offset_size:2;	//0x1C
+	uint16_t block1_basehight_size:1;
+	uint16_t block1_diffhight_size:1;
+	uint16_t block1_extra:1;
+	uint16_t reserved1C:11;
+	uint16_t tile_size;		//0x1E
+	uint32_t points_to_block1;	//0x20
+	uint32_t points_to_block2;	//0x24
+	uint32_t boundary_west;		//0x28
+	uint32_t boundary_north;	//0x2C
+	uint32_t pixel_distance_x;	//0x30
+	uint32_t pixel_distance_y;	//0x34
+	uint16_t hight_min;		//0x38
+	uint16_t hight_max;		//0x3A
+} PACK_STRUCT ;
+
 struct garmin_gmp {
 	struct garmin_subfile comm;
 	uint32_t unknown_015;
