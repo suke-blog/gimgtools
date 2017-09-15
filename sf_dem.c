@@ -69,7 +69,7 @@ void dump_dem (struct subfile_struct *sf)
 	//block3
 	for(int i=0; i<header->zoom_levels; i++){
 		printf("=== DEM BLOCK3 (%d / %d) ===\n", i+1, header->zoom_levels);
-		printf("Record index:           %u\n", block3[i].record_index);
+		printf("Record index:           0x%x\n", block3[i].record_index);
 		printf("Number of pixel(X):     %u\n", block3[i].pixel_num_x);
 		printf("Number of pixel(Y):     %u\n", block3[i].pixel_num_y);
 		printf("Size of pixel(X):       %u\n", block3[i].pixel_size_x);
