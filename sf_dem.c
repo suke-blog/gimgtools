@@ -17,8 +17,6 @@ void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
 		uint16_t diffhight_max = 0;
 		uint8_t encoding_type = 0;
 
-		char *str = dump_unknown_bytes(ptr, offset_size+1);
-		printf("offset:%s\n", str);
 		for(int i=0; i<offset_size+1; i++){
 			offset_block2 |= *(ptr++) << (8*i);
 		}
