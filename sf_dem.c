@@ -7,36 +7,43 @@ double get_degrees(uint32_t value)
 
 void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
 	uint8_t basehight_size, uint8_t diffhight_size,
-	uint8_t extra_size, uint8_t tile_count)
+	uint8_t extra_size, uint32_t max_x, uint32_t max_y)
 {
 	uint8_t *ptr = ptrBlock1;
+	uint32_t total = (max_x+1) * (max_y+1);
+	uint32_t count = 0;
 
-	for(int j=0; j<tile_count; j++){
-		uint32_t offset_block2 = 0;
-		uint16_t basehight = 0;
-		uint16_t diffhight_max = 0;
-		uint8_t encoding_type = 0;
+	for(uint32_t y=0; y<=max_y; y++){
+		for(uint32_t x=0; x<=max_x; x++){
+			uint32_t offset_block2 = 0;
+			uint16_t basehight = 0;
+			uint16_t diffhight_max = 0;
+			uint8_t encoding_type = 0;
 
-		for(int i=0; i<offset_size+1; i++){
-			offset_block2 |= *(ptr++) << (8*i);
+			for(int i=0; i<offset_size+1; i++){
+				offset_block2 |= *(ptr++) << (8*i);
+			}
+
+			for(int i=0; i<basehight_size+1; i++){
+				basehight |= *(ptr++) << (8*i);
+			}
+
+			for(int i=0; i<diffhight_size+1; i++){
+				diffhight_max |= *(ptr++) << (8*i);
+			}
+
+			if(extra_size == 1)
+				encoding_type = *(ptr++);
+
+			printf("---BLOCK1 - ContourData Record(%d / %d)---\n",
+				++count, total);
+			printf("   (PosX:%3d, PosY:%3d)\n",
+				x, y);
+			printf("> Offset Block2:  0x%x\n", offset_block2);
+			printf("> Base Hight:     %u\n", basehight);
+			printf("> Diff Hight Max: %u\n", diffhight_max);
+			printf("> Encoding type:  %u\n", encoding_type);
 		}
-
-		for(int i=0; i<basehight_size+1; i++){
-			basehight |= *(ptr++) << (8*i);
-		}
-
-		for(int i=0; i<diffhight_size+1; i++){
-			diffhight_max |= *(ptr++) << (8*i);
-		}
-
-		if(extra_size == 1)
-			encoding_type = *(ptr++);
-
-		printf("---BLOCK1 (%d / %d)---\n", j+1, tile_count);
-		printf("> Offset Block2:  0x%x\n", offset_block2);
-		printf("> Base Hight:     %u\n", basehight);
-		printf("> Diff Hight Max: %u\n", diffhight_max);
-		printf("> Encoding type:  %u\n", encoding_type);
 	}
 }
 
@@ -105,7 +112,8 @@ void dump_dem (struct subfile_struct *sf)
 			b3.block1_basehight_size,
 			b3.block1_diffhight_size,
 			b3.block1_extra,
-			b3.tile_size);
+			b3.tile_index_max_x,
+			b3.tile_index_max_y);
 
 		printf("\n-----------\n");
 	}
