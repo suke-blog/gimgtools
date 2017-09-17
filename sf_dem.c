@@ -5,7 +5,8 @@ double get_degrees(uint32_t value)
 	return (double)value * 0.00000008381903171539306640625;
 }
 
-void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
+void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t *ptrBlock2,
+	uint8_t offset_size,
 	uint8_t basehight_size, uint8_t diffhight_size,
 	uint8_t extra_size, uint32_t max_x, uint32_t max_y)
 {
@@ -44,6 +45,10 @@ void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
 			printf("> Base Hight:     %u\n", basehight);
 			printf("> Diff Hight Max: %u\n", diffhight_max);
 			printf("> Encoding type:  %u\n", encoding_type);
+			printf(">>>> Block2 DEM Data --> %s....\n",
+				dump_unknown_bytes(
+				(uint8_t *)(ptrBlock2+offset_block2),
+				 16));
 
 			if(count > limit)
 			{
@@ -114,7 +119,9 @@ void dump_dem (struct subfile_struct *sf)
 		printf("Hight min:                %u\n", b3.hight_min);
 		printf("Hight max:                %u\n", b3.hight_max);
 
-		dump_dem_block1((uint8_t *)(sf->base + b3.points_to_block1),
+		dump_dem_block1(
+			(uint8_t *)(sf->base + b3.points_to_block1),
+			(uint8_t *)(sf->base + b3.points_to_block2),
 			b3.block1_offset_size,
 			b3.block1_basehight_size,
 			b3.block1_diffhight_size,
