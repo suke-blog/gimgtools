@@ -9,6 +9,7 @@ void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
 	uint8_t basehight_size, uint8_t diffhight_size,
 	uint8_t extra_size, uint32_t max_x, uint32_t max_y)
 {
+	const uint32_t limit = 4;
 	uint8_t *ptr = ptrBlock1;
 	uint32_t total = (max_x+1) * (max_y+1);
 	uint32_t count = 0;
@@ -43,6 +44,12 @@ void dump_dem_block1 (uint8_t *ptrBlock1, uint8_t offset_size,
 			printf("> Base Hight:     %u\n", basehight);
 			printf("> Diff Hight Max: %u\n", diffhight_max);
 			printf("> Encoding type:  %u\n", encoding_type);
+
+			if(count > limit)
+			{
+				printf("....\n");
+				return;
+			}
 		}
 	}
 }
@@ -115,7 +122,6 @@ void dump_dem (struct subfile_struct *sf)
 			b3.tile_index_max_x,
 			b3.tile_index_max_y);
 
-		printf("\n-----------\n");
 	}
 
 	return;
